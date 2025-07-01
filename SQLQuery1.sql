@@ -46,4 +46,4 @@ AS
 BEGIN
     DELETE FROM Products WHERE Id = @Id
 END
-		  DROP TABLE Products;
+		
