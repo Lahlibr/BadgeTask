@@ -21,18 +21,31 @@ namespace BadgeTask.Repository
         }
         public async Task AddAsync(Product product)
         {
+            
+            var allProducts = await _context.Products
+                .FromSqlRaw("EXEC GetAllProducts")
+                .ToListAsync(); 
+
+            var exists = allProducts
+                .Any(p => string.Equals(p.PName.Trim(), product.PName.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            if (exists)
+                throw new InvalidOperationException("Product with the same name already exists.");
+
             var parameters = new[]
             {
-            new SqlParameter("@PName", product.PName),
-          
-            new SqlParameter("@Price", product.Price)
-        };
+        new SqlParameter("@PName", product.PName),
+        new SqlParameter("@Price", product.Price)
+    };
+
             await _context.Database.ExecuteSqlRawAsync("EXEC InsertProducts @PName, @Price", parameters);
         }
+
         public async Task UpdateAsync(Product product)
         {
             var parameters = new[]
             {
+                
             new SqlParameter("@Id", product.Id),
             new SqlParameter("@PName", product.PName),
             
