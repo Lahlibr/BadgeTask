@@ -42,7 +42,7 @@ namespace BadgeTask.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new { message = ex.Message }); // 400 error with message
+                return BadRequest(new { message = ex.Message }); 
             }
             catch (Exception)
             {
